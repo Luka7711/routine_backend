@@ -3,7 +3,7 @@
 ## API endpoints
 
 
-** Registration **
+**Registration**
 
 POST/auth/login - user signs in
 
@@ -13,7 +13,7 @@ GET/auth/logout - sign out
 
 PUT/auth/{user.id} - edit and update users username and password 
 
-** User Intercations **
+**User Intercations**
 
 GET/routine - home page, Write Diary, To-DO buttons 
 
