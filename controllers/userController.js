@@ -64,6 +64,11 @@ router.post('/login', async(req, res, next) => {
 					data: user,
 					message: `Welcome to Routine ${user.username}`
 				})
+			}else{
+				res.json({
+					status:404,
+					message:'username or password is incorrect, try again'
+				})
 			}
 		}
 	}
