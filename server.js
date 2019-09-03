@@ -21,6 +21,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
 const userController = require('./controllers/userController');
+
 app.use('/auth', userController);
 
 app.listen(PORT, () => {

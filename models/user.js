@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
 	password: {type: String, require:true},
 	zodiac: {type:String, require:false},
 	
-	movieList:[{
+	diaryStory:[{
 		type:mongoose.Schema.Types.ObjectId,
 		ref: 'Diary'
 	}]

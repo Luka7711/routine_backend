@@ -27,7 +27,27 @@ router.post('/register', async(req, res, next) => {
 
 	}catch(err){
 		next(err)
+		res.json({
+			status:404,
+			message:'Something went wrong!'
+		})
 	}
+})
+
+router.get('/logout', (req, res) => {
+	req.session.destroy((err) => {
+		if(err){
+			res.json({
+				status:404,
+				message:"not able to log out"
+			})
+		}else{
+			res.json({
+				status:200,
+				message:"Thank you for visiting us"
+			})
+		}
+	})
 })
 
 module.exports = router;
