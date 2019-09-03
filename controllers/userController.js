@@ -58,6 +58,12 @@ router.post('/login', async(req, res, next) => {
 			if(bcrypt.compareSync(req.body.password, user.password) === true){
 				req.session.logged === true;
 				req.session.userDbId === user._id
+
+				res.json({
+					status:200,
+					data: user,
+					message: `Welcome to Routine ${user.username}`
+				})
 			}
 		}
 	}
