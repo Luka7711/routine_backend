@@ -50,4 +50,17 @@ router.get('/logout', (req, res) => {
 	})
 })
 
+router.post('/login', async(req, res, next) => {
+	try{
+		const user = await User.findOne({'username':req.body.username});
+
+		if(user){
+			if(bcrypt.compareSync(req.body.password, user.password) === true){
+				req.session.logged === true;
+				req.session.userDbId === user._id
+			}
+		}
+	}
+})
+
 module.exports = router;
