@@ -13,4 +13,11 @@ router.get('/diary', async(req, res, next) => {
 	}
 })
 
+router.post('/diary', async(req, res, next) => {
+	try{
+		const user = User.findById(req.session.userDbId);
+	}
+	
+})
+
 module.exports = router;

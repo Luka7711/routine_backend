@@ -62,9 +62,9 @@ router.get('/logout', (req, res) => {
 
 router.post('/login', async(req, res, next) => {
 	try{
+		console.log('username is')
+		console.log(req.body)
 		const foundUser = await User.findOne({'username':req.body.username});
-		console.log('current user')
-		console.log(req.body.password + " ", + " " + foundUser.password);
 		if(foundUser){
 			if(bcrypt.compareSync(req.body.password, foundUser.password) === true){
 				req.session.logged === true;
@@ -88,7 +88,7 @@ router.post('/login', async(req, res, next) => {
 		}else{
 			res.json({
 				status:404,
-				message:'Username or password is incorrect'
+				err:'Username or password is incorrect'
 			})
 		}
 	}catch(err){

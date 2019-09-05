@@ -23,7 +23,7 @@ GET/routine/diary - returns table of list of written diaries
 
 **NEW FORM**
 
-GET/routine/diary/new - returns form for creating a diary
+POST/routine/diary - add diary data to user 
 
 **SHOW**
 

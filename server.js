@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 
 const corsOptions = {
 	origin:process.env.FRONT_END_URL,
-	creadentials:true,
+	credentials:true,
 	optionSuccessStatus:200
 }
 
