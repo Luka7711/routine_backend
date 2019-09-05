@@ -28,11 +28,22 @@ router.post('/diary/:username', async(req, res, next) => {
 		user.diaryStory.push(newDiary._id);
 		user.save();
 
-		res.json({
-			status:200,
-			data:newDiary,
-			message:'Diary was successfully added to DB'
-		})
+		User.findOne({"username":req.params.username}).populate('diaryStory').exec(function(err, stories){
+			if(err){
+				res.json({
+					status:404,
+					message:'There is no stories on database yet'
+				})
+			}else{
+				res.json({
+					status:200,
+					data:stories,
+					message:'Diary was successfully added to DB'
+
+				})
+			}
+		}) 
+
 	}catch(err){
 		next(err)
 	}	
