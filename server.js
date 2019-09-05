@@ -20,9 +20,19 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
+const corsOptions = {
+	origin:process.env.FRONT_END_URL,
+	creadentials:true,
+	optionSuccessStatus:200
+}
+
+app.use(cors(corsOptions));
+
 const userController = require('./controllers/userController');
+const diaryController = require('./controllers/diaryController');
 
 app.use('/auth', userController);
+app.use('/routine', diaryController);
 
 app.listen(PORT, () => {
 	console.log('listening on port')

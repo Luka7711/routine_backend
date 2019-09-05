@@ -25,6 +25,8 @@ router.post('/register', async(req, res, next) => {
 			req.session.logged = true;
 			req.session.userDbId = newUser._id;
 
+			console.log('session id');
+			console.log(req.session.userDbId);
 			res.json({
 				status:200,
 				data: newUser,
@@ -67,11 +69,16 @@ router.post('/login', async(req, res, next) => {
 			if(bcrypt.compareSync(req.body.password, foundUser.password) === true){
 				req.session.logged === true;
 				req.session.userDbId === foundUser._id
+
+				console.log('session id')
+				console.log(req.session);
+
 				res.json({
 					status:200,
 					data: foundUser,
 					message: `Welcome to Routine ${foundUser.username}`
 				})
+
 			}else{
 				res.json({
 					status:404,
