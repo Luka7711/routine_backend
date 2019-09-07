@@ -25,8 +25,8 @@ router.post('/diary/:username', async(req, res, next) => {
 		}
 		const newDiary = await Diary.create(diaryData);
 
-		user.diaryStory.push(newDiary._id);
-		user.save();
+		await user.diaryStory.push(newDiary._id);
+		await user.save();
 
 		User.findOne({"username":req.params.username}).populate('diaryStory').exec(function(err, stories){
 			if(err){
@@ -47,6 +47,46 @@ router.post('/diary/:username', async(req, res, next) => {
 	}catch(err){
 		next(err)
 	}	
+});
+
+
+router.get('/diary/:id', async(req, res, next) => {
+	try{
+		const diaryStory = await Diary.findById(req.params.id, (err, foundDiary) => {
+			if(err){
+				res.json({
+					status:404,
+					message: `Diary with id ${req.params.id} not found`
+				})
+			}else{
+				res.json({
+					status:200,
+					data: foundDiary,
+					message: 'Success diary is found'
+				})
+			}
+		})
+	}catch(err){
+		console.log(err);
+	}
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = router;
