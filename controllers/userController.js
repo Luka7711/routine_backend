@@ -98,6 +98,22 @@ router.post('/login', async(req, res, next) => {
 			message:'Not able to sign in, something went wrong'
 		})
 	}
+});
+
+router.get('/logout', (req, res) => {
+	req.session.destroy((err) => {
+		if(err){
+			res.json({
+				status: 404,
+				message: 'Something went wrong!'
+			})
+		}else{
+			res.json({
+				status:200,
+				message: 'Come back again'
+			})
+		}
+	})
 })
 
 module.exports = router;
