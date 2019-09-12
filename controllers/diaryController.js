@@ -4,12 +4,25 @@ const unirest	= require('unirest');
 const Diary 	= require('../models/diary');
 const User 		= require('../models/user');
 
-router.get('/diary', async(req, res, next) => {
-	const user = User.findById(req.session.userDbId);
-	if(user){
-		console.log(user)
-	}else{
-		console.log('user not found')
+router.get('/diary/:username', async(req, res, next) => {
+	try{
+		await User.findOne({'username': req.params.username}).populate('diaryStory').exec(function(err, stories) {
+			if(err){
+				res.json({
+					status:404,
+					message:'User doesnt have a stories yet'
+				})
+			}else{
+				res.json({
+					status:404,
+					message:'Success user stories found',
+					data:stories
+				})
+			}
+		});
+
+	}catch(err){
+		next(err);
 	}
 })
 
