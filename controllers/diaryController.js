@@ -14,7 +14,7 @@ router.get('/diary/:username', async(req, res, next) => {
 				})
 			}else{
 				res.json({
-					status:404,
+					status:200,
 					message:'Success user stories found',
 					data:stories
 				})
