@@ -63,7 +63,7 @@ router.post('/diary/:username', async(req, res, next) => {
 });
 
 
-router.get('/diary/:id', async(req, res, next) => {
+router.get('/my-diary/:id', async(req, res, next) => {
 	try{
 		const diaryStory = await Diary.findById(req.params.id, (err, foundDiary) => {
 			if(err){
@@ -71,7 +71,9 @@ router.get('/diary/:id', async(req, res, next) => {
 					status:404,
 					message: `Diary with id ${req.params.id} not found`
 				})
+				console.log('erroooooor')
 			}else{
+				console.log('success works fine')
 				res.json({
 					status:200,
 					data: foundDiary,
@@ -82,24 +84,23 @@ router.get('/diary/:id', async(req, res, next) => {
 	}catch(err){
 		console.log(err);
 	}
+});
+
+router.put('/my-diary/edit/:id', async(req, res, next) => {
+	try{
+		const diaryStory = await Diary.findByIdAndUpdate(req.params.id, { $set: req.body }, function(err, result){
+			if(err){
+				console.log('something went wrong')
+			}else{
+				console.log(result)
+			}
+		})
+	}catch(err){
+		res.json({
+			message:'Fail to update, catch error'
+		})
+	}
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 module.exports = router;

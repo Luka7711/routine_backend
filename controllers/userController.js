@@ -63,16 +63,11 @@ router.get('/logout', (req, res) => {
 router.post('/login', async(req, res, next) => {
 	try{
 		console.log('username is')
-		console.log(req.body)
 		const foundUser = await User.findOne({'username':req.body.username});
 		if(foundUser){
 			if(bcrypt.compareSync(req.body.password, foundUser.password) === true){
 				req.session.logged === true;
 				req.session.userDbId === foundUser._id
-
-				console.log('session id')
-				console.log(req.session);
-
 				res.json({
 					status:200,
 					data: foundUser,
