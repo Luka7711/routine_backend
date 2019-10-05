@@ -90,9 +90,15 @@ router.put('/my-diary/edit/:id', async(req, res, next) => {
 	try{
 		const diaryStory = await Diary.findByIdAndUpdate(req.params.id, { $set: req.body }, function(err, result){
 			if(err){
-				console.log('something went wrong')
+				res.json({
+					status:404,
+					message:'Failed to update'
+				})
 			}else{
-				console.log(result)
+				res.json({
+					status:200,
+					message:'Successfully updated'
+				})
 			}
 		})
 	}catch(err){
@@ -102,5 +108,24 @@ router.put('/my-diary/edit/:id', async(req, res, next) => {
 	}
 })
 
+router.delete('/my-diary/delete/:id', async(req, res, next) => {
+	try{
+		await Diary.findByIdAndDelete(req.params.id, (err, removedItem) =>{
+			if(err){
+				res.json({
+					status:404,
+					message:'Failed to delete'
+				})
+			}else{
+				res.json({
+					status:200,
+					message:'Successfully deleted'
+				})
+			}
+		})
+	}catch(err){
+		next(err)
+	}
+})
 
 module.exports = router;
