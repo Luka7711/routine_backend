@@ -121,9 +121,11 @@ router.get('/users', async(req, res, next) => {
 				})
 			}else{
 				console.log(foundUsers)
+				let currentUsers = [];
+				foundUsers.map(item=>currentUsers.push(item.username));
 				res.json({
 					status:200,
-					users:foundUsers
+					users:currentUsers
 				})
 			}
 		});
