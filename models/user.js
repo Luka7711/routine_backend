@@ -9,6 +9,9 @@ const userSchema = new mongoose.Schema({
 	diaryStory:[{
 		type:mongoose.Schema.Types.ObjectId,
 		ref: 'Diary'
+	}],
+	friends:[{
+		type:mongoose.Schema.Types.ObjectId
 	}]
 })
 

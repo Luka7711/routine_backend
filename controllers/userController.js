@@ -109,6 +109,28 @@ router.get('/logout', (req, res) => {
 			})
 		}
 	})
+});
+
+router.get('/users', async(req, res, next) => {
+	try{
+		const users = await User.find({}, function(err, foundUsers){
+			if(err){
+				res.json({
+					status:404,
+					message:'something went wrong'
+				})
+			}else{
+				console.log(foundUsers)
+				res.json({
+					status:200,
+					users:foundUsers
+				})
+			}
+		});
+
+	}catch(err){
+		next(err);
+	}
 })
 
 module.exports = router;

@@ -108,24 +108,53 @@ router.put('/my-diary/edit/:id', async(req, res, next) => {
 	}
 })
 
-router.delete('/my-diary/delete/:id', async(req, res, next) => {
+router.delete('/my-diary/delete/:id/:username', async(req, res, next) => {
 	try{
-		await Diary.findByIdAndDelete(req.params.id, (err, removedItem) =>{
+		const user = await User.findOne({username:req.params.username});
+		const diary = await Diary.findById(req.params.id);
+		user.diaryStory.remove(diary._id);
+		user.save(function(err){
 			if(err){
 				res.json({
 					status:404,
-					message:'Failed to delete'
+					message:'Failed to save'
 				})
 			}else{
 				res.json({
 					status:200,
-					message:'Successfully deleted'
+					message:'Success data deleted'
 				})
 			}
-		})
+		});
+
 	}catch(err){
 		next(err)
 	}
-})
+});
+
+router.get('/quotes', async(req, res, next) => {
+	try{
+		let req = unirest('GET', "https://150000-quotes.p.rapidapi.com/random");
+		req.headers({
+			"x-rapidapi-host": "150000-quotes.p.rapidapi.com",
+			"x-rapidapi-key": "20a16b11demsh01d177a853c4fa0p1f60c3jsnf03f5408c9ed"
+		});
+		req.end(function (response) {
+			if (res.error) throw new Error(res.error);
+				res.json({
+					status:200,
+					data: response.body,
+					message: 'Success, data is mined'
+				})
+		});
+	}catch(err){
+		next(err);
+		res.json({
+			message:'Failed to access quotes'
+		})
+	}
+});
+
+
 
 module.exports = router;
