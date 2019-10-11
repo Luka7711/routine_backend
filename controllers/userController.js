@@ -2,25 +2,49 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
+const Diary = require('../models/diary');
+const path = require('path');
+const multer = require('multer');
+const fs = require('fs');
 
-router.post('/register', async(req, res, next) => {
+const storage = multer.diskStorage({
+	destination:function(req, file, cb){
+		cb(null, './uploads/')
+	},
+	filename:function(req, file, cb){
+		cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
+	}
+});
+
+//in form new attribute enctype=multipart/form-data
+
+const upload = multer({storage:storage});
+
+router.post('/register', upload.single('avatar'), async(req, res, next) => {
 
 	if(User.findOne({'username':req.body.username}) === true){
 		res.json({
 			status:404,
 			message:'Username has been taken, try another'
 		})
-
 	}else{
 		const password = req.body.password;
 		const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+		console.log("----------")
+		console.log(req.file)
+		const img = fs.readFileSync(req.file.path);
+		const finalImg = {
+			contentType:req.file.mimetype,
+			data: img
+		}
 		const userDbEntry = {};
 
 		userDbEntry.username = req.body.username;
 		userDbEntry.password = passwordHash;
-		userDbEntry.zodiac = req.body.zodiac
+		userDbEntry.avatar = finalImg;
 
 		try{
+			console.log(req.file.filename)
 			const newUser = await User.create(userDbEntry);
 			req.session.logged = true;
 			req.session.userDbId = newUser._id;
@@ -133,6 +157,42 @@ router.get('/users', async(req, res, next) => {
 	}catch(err){
 		next(err);
 	}
+});
+
+router.get('/users/:username', async(req, res, next) => {
+	try{
+		const user = await User.findOne({'username':req.params.username}).populate('diaryStory').exec(function(err, stories){
+			if(err){
+				res.json({
+					status:404,
+					message:'Error not found'
+				})
+			}else{
+				res.json({
+					status:200,
+					stories:stories
+				})	
+			}
+		})
+	}catch(err){
+		next(err);
+	}
+});
+
+router.get('/user-avatar/:username', async(req, res, next) => {
+	try{
+		await User.findOne({'username':req.params.username}, function(err, foundUser){
+			if(err){
+				console.log(err)
+			}else{
+				res.set('Content-Type', foundUser.avatar.contentType);
+				res.send(foundUser.avatar.data);
+			}
+		})
+	}catch(err){
+		next(err)
+	}
 })
+
 
 module.exports = router;

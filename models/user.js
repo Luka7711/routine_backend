@@ -2,10 +2,9 @@ const mongoose = require('mongoose');
 const Diary = require('./diary');
 
 const userSchema = new mongoose.Schema({
-	username: {type: String, require:true},
-	password: {type: String, require:true},
-	zodiac: {type:String, require:false},
-	
+	username: {type: String, required:true},
+	password: {type: String, required:true},
+	avatar:{data:Buffer, contentType:String},
 	diaryStory:[{
 		type:mongoose.Schema.Types.ObjectId,
 		ref: 'Diary'
