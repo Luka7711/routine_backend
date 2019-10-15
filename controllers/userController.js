@@ -30,8 +30,6 @@ router.post('/register', upload.single('avatar'), async(req, res, next) => {
 	}else{
 		const password = req.body.password;
 		const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-		console.log("----------")
-		console.log(req.file)
 		const img = fs.readFileSync(req.file.path);
 		const finalImg = {
 			contentType:req.file.mimetype,
