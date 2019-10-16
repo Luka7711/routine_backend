@@ -32,9 +32,11 @@ app.use(cors(corsOptions));
 
 const userController = require('./controllers/userController');
 const diaryController = require('./controllers/diaryController');
+const messageController = require('./controllers/messageController');
 
 app.use('/auth', userController);
 app.use('/routine', diaryController);
+app.use('/message', messageController);
 
 app.listen(PORT, () => {
 	console.log('listening on port')
