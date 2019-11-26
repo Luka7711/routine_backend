@@ -9,7 +9,7 @@
     "server": "node server.js",
     "client": "npm start --prefix ../routine_front",
     "dev":"concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild":"npm install --prefix ../routine_front"
+    "heroku-postbuild":"npm install --prefix ../routine_front && npm run build --prefix ../routine_front"
   
   },
   "repository": {
