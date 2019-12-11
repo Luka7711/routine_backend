@@ -5,6 +5,8 @@ const methodOverride 	= require('method-override');
 const unirest 			= require('unirest');
 const cors 				= require('cors');
 const session 			= require('express-session');
+const http				= require('http').Server(app);
+const io				= require('socket.io')(http);
 
 require('dotenv').config();
 require('./db/db');
@@ -38,6 +40,21 @@ app.use('/auth', userController);
 app.use('/routine', diaryController);
 app.use('/message', messageController);
 
-app.listen(PORT, () => {
+io.on('connection', (socket) => {
+	console.log('user connected');
+	socket.on('messages', (message) => {
+		console.log('messages received from client');
+		io.sockets.emit('messages', message)
+		console.log('message sent to client')
+	});
+	socket.on('conversations', (conversation) => {
+		io.sockets.emit('conversations', conversation)
+	});
+	socket.on('disconnect', () => {
+		console.log('user disconnected')
+	})
+})
+
+http.listen(PORT, () => {
 	console.log('listening on port')
 });
