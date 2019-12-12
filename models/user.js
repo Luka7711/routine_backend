@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Diary = require('./diary');
-const Message = require('./message');
+const Conversation = require('./conversation');
 
 const userSchema = new mongoose.Schema({
 	username: {type: String, required:true},
@@ -13,9 +13,9 @@ const userSchema = new mongoose.Schema({
 	friends:[{
 		type:mongoose.Schema.Types.ObjectId
 	}],
-	sentMessage:[{
+	conversation:[{
 		type:mongoose.Schema.Types.ObjectId,
-		ref:'Message'
+		ref:'Conversation'
 	}]
 })
 

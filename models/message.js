@@ -9,8 +9,7 @@ const messageSchema = new mongoose.Schema({
 		ref:'Conversation'
 	},
 	body:{
-		type:String,
-		required:true
+		type:String
 	},
 	author:{
 		type:mongoose.Schema.Types.ObjectId,

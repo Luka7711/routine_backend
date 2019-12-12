@@ -41,7 +41,7 @@ app.use('/routine', diaryController);
 app.use('/message', messageController);
 
 io.on('connection', (socket) => {
-	console.log('user connected');
+	console.log('user connected socket');
 	socket.on('messages', (message) => {
 		console.log('messages received from client');
 		io.sockets.emit('messages', message)
@@ -51,7 +51,7 @@ io.on('connection', (socket) => {
 		io.sockets.emit('conversations', conversation)
 	});
 	socket.on('disconnect', () => {
-		console.log('user disconnected')
+		console.log('user disconnected socket')
 	})
 })
 
