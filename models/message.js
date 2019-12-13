@@ -8,7 +8,7 @@ const messageSchema = new mongoose.Schema({
 		required:true,
 		ref:'Conversation'
 	},
-	body:{
+	text:{
 		type:String
 	},
 	author:{
