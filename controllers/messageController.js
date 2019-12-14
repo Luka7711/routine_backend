@@ -60,6 +60,14 @@ router.post('/:author/:receiver', async(req, res, next)=>{
 });
 
 
+router.get('/my-messages/:convoid', async(req, res, next) => {
+	try{
+
+	}catch(err){
+		next(err)
+	}
+})
+
 
 
 module.exports = router;
