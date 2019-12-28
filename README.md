@@ -2,9 +2,10 @@
 The blog app created with Node JS, socket.io and MongoDB
 
 ## Set up
+```
 $ npm install
 $ node app.js
-
+```
 
 ## API endpoints
 
