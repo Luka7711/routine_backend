@@ -7,6 +7,11 @@ $ npm install
 $ node app.js
 ```
 
+## Features
+* Personal blog
+* Messenger
+* News
+
 ## API endpoints
 
 
