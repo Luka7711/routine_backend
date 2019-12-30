@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "## API endpoints",
   "main": "server.js",
+  "engines": {
+    "node": "10.16.3",
+    "npm": "6.9.0"
+  },
   "scripts": {
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "node server.js",
-    "client": "npm start --prefix ../routine_front",
-    "dev":"concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild":"npm install --prefix ../routine_front && npm run build --prefix ../routine_front"
+    // "server": "node server.js",
+    // "client": "npm start --prefix ../routine_front",
+    // "dev":"concurrently \"npm run server\" \"npm run client\"",
+    // "heroku-postbuild":"npm install --prefix ../routine_front && npm run build --prefix ../routine_front"
   
   },
   "repository": {
