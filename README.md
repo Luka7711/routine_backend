@@ -1,4 +1,16 @@
-# routine_backend
+# Routine - Blog-Chat app 
+The blog app created with Node JS, socket.io and MongoDB
+
+## Set up
+```
+$ npm install
+$ node server.js
+```
+
+## Features
+* Personal blog
+* Messenger
+* News
 
 ## API endpoints
 
