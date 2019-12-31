@@ -11,6 +11,7 @@ const io				= require('socket.io')(http);
 require('dotenv').config();
 require('./db/db');
 
+
 const PORT = process.env.PORT;
 
 
@@ -31,6 +32,11 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 const userController = require('./controllers/userController');
 const diaryController = require('./controllers/diaryController');
