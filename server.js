@@ -33,11 +33,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
-
 const userController = require('./controllers/userController');
 const diaryController = require('./controllers/diaryController');
 const messageController = require('./controllers/messageController');
