@@ -7,7 +7,7 @@ const cors 				= require('cors');
 const session 			= require('express-session');
 const http				= require('http').Server(app);
 const io				= require('socket.io')(http);
-
+const socket 			= require('socket.io');
 require('dotenv').config();
 require('./db/db');
 
@@ -33,6 +33,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+
+
 const userController = require('./controllers/userController');
 const diaryController = require('./controllers/diaryController');
 const messageController = require('./controllers/messageController');
@@ -43,10 +45,12 @@ app.use('/message', messageController);
 
 io.on('connection', (socket) => {
 	console.log('user connected socket');
+	console.log(socket.id)
 	socket.on('messages', (message) => {
 		console.log('messages received from client');
 		io.sockets.emit('messages', message)
-		console.log('message sent to client')
+		console.log('message sent to client');
+		console.log(message);
 	});
 	socket.on('conversations', (conversation) => {
 		io.sockets.emit('conversations', conversation)

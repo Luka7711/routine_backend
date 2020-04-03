@@ -103,8 +103,9 @@ router.post('/login', async(req, res, next) => {
 				})
 			}
 		}else{
+			console.log(req.body.username);
 			res.json({
-				status:404,
+				status:401,
 				err:'Username or password is incorrect'
 			})
 		}

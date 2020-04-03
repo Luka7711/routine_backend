@@ -21,6 +21,7 @@ router.post('/texting/:user/:convoid', async(req, res, next) => {
 			message: message
 		})
 	}catch(err){
+		console.log("something went wrong")
 		console.log(err)
 	}
 		
