@@ -88,6 +88,85 @@ router.get('/my-conversation/:convoid', async(req, res, next) => {
 	}
 })
 
+router.get('/contact-list/:user', async(req, res, next) => {
+	try{
+		let loggedUser = await User.findOne({username:req.params.user});
+		
+		let dataSend 		= []; // data about user contacts ({name, [messages]}) 
+		let message 		= []; // 
+		let mixedIDS 		= []; //
+		let uniqContacts 	= []; //
+		let contactName 	= [];
+		let convObj;
+		// iterate conversation objects and store 
+		// participants in global array
 
+		let storeContIds = async() => {
+			convObj = await Conversation.find({"participants":loggedUser._id});
+			console.log(convObj);
+			return new Promise(resolve => {
+					// console.log(contactName, "from fun");
+					if(convObj == null) res.json({status:202, msg:"user didnt message anyone yet"})
+			
+					else{
+						convObj.map(async(ids, i) => {
+							await mixedIDS.push(ids.participants);
+						})	
+					}
+				resolve()
+				//1 loop each element as id
+				mixedIDS.map(async(elem, i) => {
+					elem.map(async(mycontactID, k) => {
+						//storing user contacts id to uniq array
+						if(mycontactID.toString() !== loggedUser._id.toString()) {
+							let idToString = await mycontactID.toString();
+							await uniqContacts.push(idToString);
+						}
+					})
+				})
+			})
+		}//storeNames
+
+		let storeContNames = async() => {
+			await storeContIds();
+			let contact;
+			let message;
+			let i=0;
+
+			class ContactList{
+				constructor(username, messages, url){
+					this.username = username;
+					this.messages = messages;
+					this.url 	  = url;
+				}
+			}
+
+			while(i<uniqContacts.length){
+				message = await Message.find({"conversationId":convObj[i]._id});
+				contact = await User.findOne({"_id": uniqContacts[i]}, async(err, foundUser) => {
+					if(err){
+						console.log("too fast")
+					}
+					else{
+						console.log(message, "message");
+						await contactName.push(foundUser.username);
+						await dataSend.push(new ContactList(foundUser.username, message, "https://localhost:9000/auth/user-avatar/"+foundUser.username))
+						i++;
+					}
+				})
+			}
+			return console.log(contactName)
+		}
+
+		storeContNames().then(()=> {
+			res.json({
+				status:200,
+				data:dataSend
+			})
+		})
+	}catch(err){
+		console.log(err)
+	}
+})
 
 module.exports = router;

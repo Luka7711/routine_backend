@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
 const corsOptions = {
-	origin:process.env.FRONT_END_URL,
+	origin: process.env.FRONT_END_URL,
 	credentials:true,
 	optionSuccessStatus:200
 }
@@ -45,7 +45,6 @@ app.use('/message', messageController);
 
 io.on('connection', (socket) => {
 	console.log('user connected socket');
-	console.log(socket.id)
 	socket.on('messages', (message) => {
 		console.log('messages received from client');
 		io.sockets.emit('messages', message)
