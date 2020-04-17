@@ -6,7 +6,6 @@ const Message = require('../models/message');
 
 router.post('/texting/:user/:convoid', async(req, res, next) => {
 	try{
-		console.log(req.body)
 		const user = await User.findOne({"username": req.params.user});
 		const messageData = {
 			conversationId: req.params.convoid,
@@ -35,7 +34,6 @@ router.post('/:author/:receiver', async(req, res, next)=>{
 		const shipper = await User.findOne({username:req.params.author});
 		const receiver = await User.findOne({username:req.params.receiver});
 		await Conversation.find({"participants": {"$all" : [shipper.id, receiver.id]} }, async(err, conversation) => {
-			console.log(conversation)
 			if(conversation.length == 0){
 				const newConvers = await Conversation.create(req.body);
 			
@@ -103,10 +101,9 @@ router.get('/contact-list/:user', async(req, res, next) => {
 
 		let storeContIds = async() => {
 			convObj = await Conversation.find({"participants":loggedUser._id});
-			console.log(convObj);
 			return new Promise(resolve => {
 					// console.log(contactName, "from fun");
-					if(convObj == null) res.json({status:202, msg:"user didnt message anyone yet"})
+					if(convObj == null) res.json({status:202, data:null})
 			
 					else{
 						convObj.map(async(ids, i) => {
@@ -148,14 +145,13 @@ router.get('/contact-list/:user', async(req, res, next) => {
 						console.log("too fast")
 					}
 					else{
-						console.log(message, "message");
 						await contactName.push(foundUser.username);
-						await dataSend.push(new ContactList(foundUser.username, message, "https://localhost:9000/auth/user-avatar/"+foundUser.username))
+						await dataSend.push(new ContactList(foundUser.username, message, "http://localhost:9000/auth/user-avatar/"+foundUser.username))
 						i++;
 					}
 				})
 			}
-			return console.log(contactName)
+			return contactName
 		}
 
 		storeContNames().then(()=> {

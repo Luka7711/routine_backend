@@ -22,19 +22,15 @@ const upload = multer({storage:storage});
 
 router.post('/register', upload.single('avatar'), async(req, res, next) => {
 
-	if(User.findOne({'username':req.body.username}) === true){
-		res.json({
-			status:404,
-			message:'Username has been taken, try another'
-		})
-	}else{
+	await User.findOne({'username':req.body.username}, async(err, foundUser) => {
+		if(foundUser === null){
 		const password = req.body.password;
 		const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 		const img = fs.readFileSync(req.file.path);
 		const finalImg = {
 			contentType:req.file.mimetype,
 			data: img
-		}
+			}
 		const userDbEntry = {};
 
 		userDbEntry.username = req.body.username;
@@ -63,7 +59,13 @@ router.post('/register', upload.single('avatar'), async(req, res, next) => {
 			})
 		}
 
-	}
+		}if(foundUser.username === req.body.username){
+			res.json({
+				status:404,
+				message:'Username has been taken, try another'
+			})
+		}
+	})
 })
 
 router.get('/logout', (req, res) => {
