@@ -6,60 +6,81 @@ const Message = require('../models/message');
 
 router.post('/texting/:user/:convoid', async(req, res, next) => {
 	try{
-		const user = await User.findOne({"username": req.params.user});
-		const messageData = {
-			conversationId: req.params.convoid,
-			text: req.body.text,
-			author: user
-		}
-		const message = await Message.create(messageData);
-		message.save();
+		const shipper	= await User.findOne({username: req.body.shipper});
+		const receiver	= await User.findOne({username: req.body.receiver});
 
-		res.json({
-			status:200,
-			message: message
-		})
+		if(req.params.convoid === "null") {
+			
+			let newConvo = await Conversation.create(req.body);
+			newConvo.participants.push(shipper._id, receiver._id);
+			newConvo.save();
+
+			shipper.conversation.push(newConvo._id);
+			shipper.save()
+			
+			receiver.conversation.push(newConvo._id);
+			receiver.save();
+
+			const messageData = {
+				conversationId: newConvo._id,
+				text: req.body.text,
+				author: shipper
+			}
+			
+			const message = await Message.create(messageData);
+			message.save();
+
+			res.json({
+				status:200,
+				convoID:newConvo._id
+			})
+		}
+		else{
+			const messageData = {
+				conversationId: req.params.convoid,
+				text: req.body.text,
+				author: shipper
+			}
+			
+			const message = await Message.create(messageData);
+			message.save();
+
+			res.json({
+				status:200,
+				convoID: req.params.convoid
+			})
+		}
 	}catch(err){
-		console.log("something went wrong")
 		console.log(err)
 	}
-		
-})
+});
 
 			//zack <=> dina
-router.post('/:author/:receiver', async(req, res, next)=>{
+router.get('/receive-id/text/:author/:receiver', async(req, res, next)=>{
 	// when contact is chosen, and ready to start to chat
 	// find conversation where participants 1 and 2 has conversation 
 	try{
-		const shipper = await User.findOne({username:req.params.author});
-		const receiver = await User.findOne({username:req.params.receiver});
-		await Conversation.find({"participants": {"$all" : [shipper.id, receiver.id]} }, async(err, conversation) => {
-			if(conversation.length == 0){
-				const newConvers = await Conversation.create(req.body);
-			
-				newConvers.participants.push(shipper, receiver);
-				newConvers.save();
-			
-				shipper.conversation.push(newConvers);
-				shipper.save();
-				
-				receiver.conversation.push(newConvers);
-				receiver.save();
-
+		const shipper 	= await User.findOne({username:req.params.author});
+		const receiver 	= await User.findOne({username:req.params.receiver});
+		const convo 	= await Conversation.findOne({"participants": {"$all" : [shipper.id, receiver.id]} }, async(err, conversation) => {
+			if(conversation === null){
 				res.json({
 					status:200,
-					conversationData: newConvers.id
+					conversationId:null
 				})
-			}else{
+			}
+			else{
+				// if conversation exist pull all messages between two contacts
+				// send messages to FRONT END
 				res.json({
-				status:200,
-				conversationData: conversation[0]._id,
-				mess: "exist chat"
+					status:200,
+					conversationId:conversation._id
 				})
+			
 			}
 		})
 	}catch(err){
-		console.log(err)
+		console.log(err, "###########");
 	}
 
 });
@@ -145,6 +166,7 @@ router.get('/contact-list/:user', async(req, res, next) => {
 						console.log("too fast")
 					}
 					else{
+						console.log("here is the bug")
 						await contactName.push(foundUser.username);
 						await dataSend.push(new ContactList(foundUser.username, message, "http://localhost:9000/auth/user-avatar/"+foundUser.username))
 						i++;
