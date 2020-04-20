@@ -26,7 +26,7 @@ router.post('/texting/:user/:convoid', async(req, res, next) => {
 				text: req.body.text,
 				author: shipper
 			}
-			
+
 			const message = await Message.create(messageData);
 			message.save();
 
@@ -51,7 +51,7 @@ router.post('/texting/:user/:convoid', async(req, res, next) => {
 			})
 		}
 	}catch(err){
-		console.log(err)
+		console.log("something went wrong")
 	}
 });
 
@@ -162,14 +162,18 @@ router.get('/contact-list/:user', async(req, res, next) => {
 			while(i<uniqContacts.length){
 				message = await Message.find({"conversationId":convObj[i]._id});
 				contact = await User.findOne({"_id": uniqContacts[i]}, async(err, foundUser) => {
-					if(err){
-						console.log("too fast")
-					}
-					else{
-						console.log("here is the bug")
-						await contactName.push(foundUser.username);
-						await dataSend.push(new ContactList(foundUser.username, message, "http://localhost:9000/auth/user-avatar/"+foundUser.username))
-						i++;
+					try{
+						if(err){
+							console.log("too fast")
+						}
+						else{
+							await contactName.push(foundUser.username);
+							await dataSend.push(new ContactList(foundUser.username, message, "http://localhost:9000/auth/user-avatar/"+foundUser.username))
+							i++;
+						}
+					}	
+					catch(err){
+						console.log(err)
 					}
 				})
 			}

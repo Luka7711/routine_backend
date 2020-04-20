@@ -5,7 +5,6 @@ const Conversation = require('./conversation')
 const messageSchema = new mongoose.Schema({
 	conversationId:{
 		type:mongoose.Schema.Types.ObjectId,
-		required:true,
 		ref:'Conversation'
 	},
 	text:{
