@@ -24,7 +24,8 @@ router.post('/texting/:user/:convoid', async(req, res, next) => {
 			const messageData = {
 				conversationId: newConvo._id,
 				text: req.body.text,
-				author: shipper
+				author: shipper,
+				timestamp: req.body.timestamp
 			}
 
 			const message = await Message.create(messageData);
@@ -39,9 +40,10 @@ router.post('/texting/:user/:convoid', async(req, res, next) => {
 			const messageData = {
 				conversationId: req.params.convoid,
 				text: req.body.text,
-				author: shipper
+				author: shipper,
+				timestamp:req.body.timestamp
 			}
-			
+
 			const message = await Message.create(messageData);
 			message.save();
 
@@ -167,9 +169,13 @@ router.get('/contact-list/:user', async(req, res, next) => {
 							console.log("too fast")
 						}
 						else{
-							await contactName.push(foundUser.username);
-							await dataSend.push(new ContactList(foundUser.username, message, "http://localhost:9000/auth/user-avatar/"+foundUser.username))
-							i++;
+							try{
+								await contactName.push(foundUser.username);
+								await dataSend.push(new ContactList(foundUser.username, message, "http://localhost:9000/auth/user-avatar/"+foundUser.username))
+								i++;
+							}
+							catch(err){
+							}
 						}
 					}	
 					catch(err){
@@ -180,7 +186,8 @@ router.get('/contact-list/:user', async(req, res, next) => {
 			return contactName
 		}
 
-		storeContNames().then(()=> {
+		storeContNames().then(async()=> {
+			
 			res.json({
 				status:200,
 				data:dataSend

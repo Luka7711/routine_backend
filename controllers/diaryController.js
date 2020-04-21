@@ -38,7 +38,7 @@ router.post('/diary/:username', async(req, res, next) => {
 		}
 		const newDiary = await Diary.create(diaryData);
 
-		await user.diaryStory.push(newDiary._id);
+		await user.diaryStory.unshift(newDiary._id);
 		await user.save();
 
 		User.findOne({"username":req.params.username}).populate('diaryStory').exec(function(err, stories){
