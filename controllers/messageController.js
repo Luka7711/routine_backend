@@ -145,7 +145,7 @@ router.get('/contact-list/:user', async(req, res, next) => {
 						console.log("too fast")
 					}
 					else if(foundUser){
-						await dataSend.push(new ContactList(foundUser.username, message, "http://localhost:9000/auth/user-avatar/"+foundUser.username))
+						await dataSend.push(new ContactList(foundUser.username, message, process.env.REACT_APP_BACKEND_URL+"/auth/user-avatar/"+foundUser.username))
 					}
 				})
 			}
