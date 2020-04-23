@@ -138,16 +138,14 @@ router.get('/contact-list/:user', async(req, res, next) => {
 				}
 			}
 
-			while(i<uniqContacts.length){
+			for(let i=0; i < uniqContacts.length; i++){
 				message = await Message.find({"conversationId":convObj[i]._id});
 				contact = await User.findOne({"_id": uniqContacts[i]}, async(err, foundUser) => {
 					if(err){
 						console.log("too fast")
 					}
-					else{
-						await contactName.push(foundUser.username);
+					else if(foundUser){
 						await dataSend.push(new ContactList(foundUser.username, message, "http://localhost:9000/auth/user-avatar/"+foundUser.username))
-						i++;
 					}
 				})
 			}
